@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace MathPart
 {
-    class SplineInterpolator : Interpolator
+    public class SplineInterpolator : Interpolator
     {
         SplineTuple[] splines; 
         private struct SplineTuple
         {
             public double a, b, c, d, x;
         }
-        void Interpolator.init(KeyValuePair<double, double>[] data)
+        public SplineInterpolator() { }
+        public SplineInterpolator(KeyValuePair<double, double>[] data)
+        {
+            this.init(data);
+        }
+        public void init(KeyValuePair<double, double>[] data)
         {
             var n = data.Length;
             splines = new SplineTuple[n];

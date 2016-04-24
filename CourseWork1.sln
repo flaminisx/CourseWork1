@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "ConsoleApplication\ConsoleApplication.csproj", "{C3E16E3C-4BD4-414A-9636-ABBB6705863C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{756D2353-6713-430A-A25B-06EEFA16317F} = {756D2353-6713-430A-A25B-06EEFA16317F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathPart", "MathPart\MathPart.csproj", "{756D2353-6713-430A-A25B-06EEFA16317F}"
 EndProject

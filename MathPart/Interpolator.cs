@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathPart
 {
-    interface Interpolator
+    public interface Interpolator
     {
         void init(KeyValuePair<double,double>[] data);
         double getPoint(double x);

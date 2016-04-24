@@ -1,16 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathPart;
+using System.Globalization;
 
 namespace ConsoleApplication
 {
     class Program
     {
+        List<KeyValuePair<double, double>> values;
+        private void initializeData(String fileName)
+        {
+            values = new List<KeyValuePair<double, double>>();
+            try
+            {
+                using (Stream stream = File.Open("input.txt", FileMode.Open))
+                using (TextReader sr = new StreamReader(stream, Encoding.UTF8))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        string[] arr = line.Split(' ');
+                        values.Add(new KeyValuePair<double, double>(Double.Parse(arr[0]), Double.Parse(arr[1])));
+
+                    }
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.Write("File #{0} was not found!", e.FileName);
+            }
+            catch (Exception e)
+            {
+                Console.Write("File has invalid format!");
+            }
+        }
+        private void showInput()
+        {
+            Console.WriteLine("You entered {0} values:", values.Count);
+            foreach (KeyValuePair<double, double> value in values)
+            {
+                Console.WriteLine("({0} : {1})", value.Key, value.Value);
+            }
+        }
+        public Program()
+        {
+            initializeData("input");
+            
+            Interpolator i = selectMethod();
+            while (i == null)
+            {
+                i = selectMethod();
+            }
+            double x = getX();
+            Console.WriteLine("({0} : {1})", x, i.getPoint(x));
+            Console.ReadKey();
+        }
+        private double getX()
+        {
+            Console.WriteLine("Enter x: ");
+            try
+            {
+                return Double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Try again..");
+                return getX();
+            }
+        }
+        private Interpolator selectMethod()
+        {
+            Console.WriteLine("Press\t1 to select Cubic Spline Interpolator");
+            Console.WriteLine("\t2 for Newton Interpolator");
+            var k = Console.ReadKey(true);
+            Interpolator i;
+            switch (k.KeyChar)
+            {
+                case '1':
+                    i = new SplineInterpolator();
+                    break;
+                case '2':
+                    i = new NewtonInterpolator();
+                    break;
+                default:
+                    i = null;
+                    break;
+            }
+            try
+            {
+                i.init(values.ToArray());
+            }
+            catch (NotImplementedException e)
+            {
+                Console.WriteLine("Not implemented yet");
+                return null;
+            }
+            catch(NullReferenceException e)
+            {
+                Console.WriteLine("Please, select from list.");
+            }
+            return i;
+        }
+
         static void Main(string[] args)
         {
-            Console.Write("init");
+            new Program();
         }
     }
 }
