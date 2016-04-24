@@ -15,19 +15,19 @@ namespace MathPart
         }
         public double getPoint(double x)
         {
-            double res = data[0].Value, F, den;
+            double res = data[0].Value, F, d;
             int i, j, k;
             for (i = 1; i <= n; i++)
             {
                 F = 0;
                 for (j = 0; j <= i; j++)
                 {
-                    den = 1;
+                    d = 1;
                     for (k = 0; k <= i; k++)
                     {
-                        if (k != j) den *= (data[j].Key - data[k].Key);
+                        if (k != j) d *= (data[j].Key - data[k].Key);
                     }
-                    F += data[j].Value / den;
+                    F += data[j].Value / d;
                 }
                 for (k = 0; k < i; k++) F *= (x - data[k].Key);
                 res += F;

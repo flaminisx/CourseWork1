@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathPart", "MathPart\MathPart.csproj", "{756D2353-6713-430A-A25B-06EEFA16317F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicPart", "GraphicPart\GraphicPart.csproj", "{FDC9CD04-86E1-418A-B12F-1781EDB871B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{756D2353-6713-430A-A25B-06EEFA16317F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{756D2353-6713-430A-A25B-06EEFA16317F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{756D2353-6713-430A-A25B-06EEFA16317F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC9CD04-86E1-418A-B12F-1781EDB871B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC9CD04-86E1-418A-B12F-1781EDB871B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC9CD04-86E1-418A-B12F-1781EDB871B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC9CD04-86E1-418A-B12F-1781EDB871B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
