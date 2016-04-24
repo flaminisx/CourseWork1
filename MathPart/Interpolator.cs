@@ -8,7 +8,7 @@ namespace MathPart
 {
     interface Interpolator
     {
-        void init(List<KeyValuePair<double,double>> data);
+        void init(KeyValuePair<double,double>[] data);
         double getPoint(double x);
     }
 }
