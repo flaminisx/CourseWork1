@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 
 namespace MathPart
 {
     public class NewtonInterpolator : Interpolator
     {
+        KeyValuePair<double, double>[] data;
+        int n;
         public NewtonInterpolator() { }
         public NewtonInterpolator(KeyValuePair<double, double>[] data)
         {
@@ -15,12 +15,43 @@ namespace MathPart
         }
         public double getPoint(double x)
         {
-            throw new NotImplementedException();
+            double res = data[0].Value, F, den;
+            int i, j, k;
+            for (i = 1; i <= n; i++)
+            {
+                F = 0;
+                for (j = 0; j <= i; j++)
+                {
+                    den = 1;
+                    for (k = 0; k <= i; k++)
+                    {
+                        if (k != j) den *= (data[j].Key - data[k].Key);
+                    }
+                    F += data[j].Value / den;
+                }
+                for (k = 0; k < i; k++) F *= (x - data[k].Key);
+                res += F;
+            }
+            return res;
         }
 
-        public void init(KeyValuePair<double, double>[] data)
+        public void init(KeyValuePair<double, double>[] _data)
         {
-            throw new NotImplementedException();
+            data = _data;
+            n = getN();
+        }
+        public int getN()
+        {
+            Console.WriteLine("Enter the power of interpolation: ");
+            try
+            {
+                return int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Try again..");
+                return getN();
+            }
         }
     }
 }
