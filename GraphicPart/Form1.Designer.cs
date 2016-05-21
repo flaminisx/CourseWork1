@@ -44,7 +44,8 @@
             this.chart.ChartAreas.Add(chartArea1);
             this.chart.Location = new System.Drawing.Point(12, 12);
             this.chart.Name = "chart";
-            this.chart.Size = new System.Drawing.Size(404, 363);
+            this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
+            this.chart.Size = new System.Drawing.Size(402, 363);
             this.chart.TabIndex = 0;
             this.chart.Text = "chart1";
             // 
