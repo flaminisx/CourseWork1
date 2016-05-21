@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,15 @@ namespace MathPart
             public double a, b, c, d, x;
         }
         public SplineInterpolator() { }
+        public SplineInterpolator(List<PointF> points)
+        {
+            KeyValuePair<double, double>[] data = new KeyValuePair<double, double>[points.Count];
+            for (int i = 0; i < points.Count; i++)
+            {
+                data[i] = new KeyValuePair<double, double>(points[i].X, points[i].Y);
+            }
+            this.init(data);
+        }
         public SplineInterpolator(KeyValuePair<double, double>[] data)
         {
             this.init(data);

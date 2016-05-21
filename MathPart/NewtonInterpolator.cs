@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 
 namespace MathPart
@@ -8,7 +9,19 @@ namespace MathPart
     {
         KeyValuePair<double, double>[] data;
         int n;
+        public void setPowerOfInterpolation(int p)
+        {
+            n = p;
+        }
         public NewtonInterpolator() { }
+        public NewtonInterpolator(List<PointF> points)
+        {
+            data = new KeyValuePair<double, double>[points.Count];
+            for (int i = 0; i < points.Count; i++)
+            {
+                data[i] = new KeyValuePair<double, double>(points[i].X, points[i].Y);
+            }
+        }
         public NewtonInterpolator(KeyValuePair<double, double>[] data)
         {
             this.init(data);
