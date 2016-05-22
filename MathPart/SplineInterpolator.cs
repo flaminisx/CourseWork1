@@ -68,7 +68,7 @@ namespace MathPart
             }
         }
 
-        double Interpolator.getPoint(double x)
+        public double getPoint(double x)
         {
             if (splines == null)
             {
