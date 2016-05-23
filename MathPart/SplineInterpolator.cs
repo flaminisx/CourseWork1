@@ -109,5 +109,10 @@ namespace MathPart
             }
             return splines[j];
         }
+
+        public string getType()
+        {
+            return "Cubic Spline Interpolator";
+        }
     }
 }

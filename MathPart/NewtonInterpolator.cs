@@ -66,5 +66,10 @@ namespace MathPart
                 return getN();
             }
         }
+
+        public string getType()
+        {
+            return "NewTon Interpolator";
+        }
     }
 }

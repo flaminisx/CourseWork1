@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using MathPart;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace GraphicPart
 {
@@ -13,7 +16,7 @@ namespace GraphicPart
         List<PointF> kdata;
         Color[] colors = { Color.DarkOrange, Color.ForestGreen };
         private int powerOfInterpolation = 4;
-        private const int MAX_POWER = 4;
+        private const int MAX_POWER = 1000000;
         int num = 0;
         private double min, max;
         public Form1()
@@ -118,8 +121,8 @@ namespace GraphicPart
                 powerOfInterpolation = data.Count - 1;
             findMinMax();
             redisplayInterpolators(min, max);
-            knownGridView.Update();
-            knownGridView.Refresh();
+            knownGridView.DataSource = null;
+            knownGridView.DataSource = data;
         }
 
         private void sortData()
@@ -145,7 +148,7 @@ namespace GraphicPart
             redisplayInterpolators(min, max);
         }
 
-        private void findXbox_TextChanged(object sender, EventArgs e)
+        private void findXEvent(object sender, EventArgs e)
         {
             double x = 0;
             try
@@ -156,22 +159,38 @@ namespace GraphicPart
                     case 0:
                         var h = new NewtonInterpolator(data.ToList());
                         h.setPowerOfInterpolation(powerOfInterpolation);
-                        foundYbox.Text = h.getPoint(x).ToString();
+                        findY(h, x);
                         break;
                     case 1:
                         var s = new SplineInterpolator(data.ToList());
-                        foundYbox.Text = s.getPoint(x).ToString();
+                        findY(s, x);
                         break;
                     default:
                         break;
                 }
+
             }
             catch (Exception ex)
             {
                 foundYbox.Text = "Error!";
             }
         }
+        private void findY(Interpolator i, double x)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            double y = i.getPoint(x);
+            foundYbox.Text = y.ToString();
+            stopWatch.Stop();
+            timeBox.Text = stopWatch.Elapsed.TotalMilliseconds + "ms";
+            if (!File.Exists("rezults.txt")) File.Create("rezults.txt").Dispose();
+            using (Stream stream = File.Open("rezults.txt", FileMode.Append))
+            using (TextWriter sr = new StreamWriter(stream, Encoding.UTF8))
+            {
+                sr.WriteLine(i.getType() + " x = " + x.ToString() + "; y = " + y.ToString());
+            }
 
+        }
         private void delBtn_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow r in knownGridView.SelectedRows)
@@ -179,8 +198,10 @@ namespace GraphicPart
                 data.RemoveAt(r.Index);
                 Console.WriteLine(r.Index);
             }
-            knownGridView.Update();
-            knownGridView.Refresh();
+            //knownGridView.Update();
+            //knownGridView.Refresh();
+            knownGridView.DataSource = null;
+            knownGridView.DataSource = data;
             redisplayInterpolators(min, max);
         }
 
@@ -188,6 +209,7 @@ namespace GraphicPart
         {
             Console.WriteLine(e.RowIndex);
         }
+
 
         private void displayChartDomain()
         {

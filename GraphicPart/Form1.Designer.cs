@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.knownGridView = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -62,24 +62,24 @@
             // 
             // chart
             // 
-            chartArea2.AxisX.MajorGrid.Enabled = false;
-            chartArea2.AxisX2.MajorGrid.Enabled = false;
-            chartArea2.AxisY.MajorGrid.Enabled = false;
-            chartArea2.AxisY2.MajorGrid.Enabled = false;
-            chartArea2.BorderWidth = 0;
-            chartArea2.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea2);
-            legend3.Name = "Newton";
-            legend3.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall;
-            legend4.Name = "Spline";
-            legend4.Position.Auto = false;
-            legend4.Position.Height = 6.629834F;
-            legend4.Position.Width = 19.61415F;
-            legend4.Position.X = 70.64631F;
-            legend4.Position.Y = 11F;
-            legend4.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall;
-            this.chart.Legends.Add(legend3);
-            this.chart.Legends.Add(legend4);
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX2.MajorGrid.Enabled = false;
+            chartArea1.AxisY.MajorGrid.Enabled = false;
+            chartArea1.AxisY2.MajorGrid.Enabled = false;
+            chartArea1.BorderWidth = 0;
+            chartArea1.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Newton";
+            legend1.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall;
+            legend2.Name = "Spline";
+            legend2.Position.Auto = false;
+            legend2.Position.Height = 6.629834F;
+            legend2.Position.Width = 19.61415F;
+            legend2.Position.X = 70.64631F;
+            legend2.Position.Y = 11F;
+            legend2.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Tall;
+            this.chart.Legends.Add(legend1);
+            this.chart.Legends.Add(legend2);
             this.chart.Location = new System.Drawing.Point(12, 12);
             this.chart.Name = "chart";
             this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
@@ -208,6 +208,7 @@
             this.methodPicker.Name = "methodPicker";
             this.methodPicker.Size = new System.Drawing.Size(121, 21);
             this.methodPicker.TabIndex = 15;
+            this.methodPicker.SelectedIndexChanged += new System.EventHandler(this.findXEvent);
             // 
             // label7
             // 
@@ -250,7 +251,7 @@
             this.findXbox.Name = "findXbox";
             this.findXbox.Size = new System.Drawing.Size(89, 20);
             this.findXbox.TabIndex = 17;
-            this.findXbox.TextChanged += new System.EventHandler(this.findXbox_TextChanged);
+            this.findXbox.TextChanged += new System.EventHandler(this.findXEvent);
             // 
             // label10
             // 

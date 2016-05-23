@@ -10,5 +10,6 @@ namespace MathPart
     {
         void init(KeyValuePair<double,double>[] data);
         double getPoint(double x);
+        string getType();
     }
 }
