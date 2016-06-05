@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphicPart
 {
-    class PointXComparer : IComparer<PointF>
+    class PointXComparer : IComparer<PointF> //класс, що порівнює 2 точки за данними X
     {
         public int Compare(PointF x, PointF y)
         {

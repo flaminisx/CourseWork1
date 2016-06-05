@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace MathPart
 {
-    public class Storage : ICollection<PointF>, IList<PointF>, IListSource
+    public class Storage : ICollection<PointF>, IList<PointF>, IListSource //класс для збереження інтерполяційної сітки
     {
-        private String filename;
-        List<PointF> data;
-        public int Count
+        private String filename; // назва файлу для збереження данних
+        List<PointF> data; // список вузлів інтерполяції
+        public int Count //кількість вузлів інтерполяції
         {
             get
             {
@@ -22,7 +22,7 @@ namespace MathPart
             }
         }
 
-        public bool IsReadOnly
+        public bool IsReadOnly 
         {
             get
             {
@@ -38,7 +38,7 @@ namespace MathPart
             }
         }
 
-        public PointF this[int index]
+        public PointF this[int index] // доступ до вузлів інтерполіції
         {
             get
             {
@@ -65,7 +65,7 @@ namespace MathPart
             }
             
         }
-        private List<PointF> getData()
+        private List<PointF> getData() //зчитування сітки інтерполяції з файлу
         {
             List<PointF> values = new List<PointF>();
             using (Stream stream = File.Open(filename, FileMode.Open))
@@ -81,7 +81,7 @@ namespace MathPart
             }
             return values;
         }
-        private void writePoint(PointF p)
+        private void writePoint(PointF p) //запис однієї точки у файл
         {
             using (Stream stream = File.Open(filename, FileMode.Append))
             using (TextWriter sr = new StreamWriter(stream, Encoding.UTF8))
@@ -90,7 +90,7 @@ namespace MathPart
                 sr.WriteLineAsync(line);
             }
         }
-        private void writePoints(List<PointF> ps)
+        private void writePoints(List<PointF> ps) // запис кількох точок у файл
         {
             using (Stream stream = File.Open(filename, FileMode.Append))
             using (TextWriter sr = new StreamWriter(stream, Encoding.UTF8))
@@ -102,29 +102,29 @@ namespace MathPart
             }
         }
 
-        public void Add(PointF item)
+        public void Add(PointF item) // додавання точки у файл і список
         {
             writePoint(item);
             data.Add(item);
         }
 
-        public void Clear()
+        public void Clear() // очищення файлу і списку
         {
             data.Clear();
             File.WriteAllText(filename, string.Empty);
         }
 
-        public bool Contains(PointF item)
+        public bool Contains(PointF item) // перевірка чи є точка у сітці
         {
             return data.Contains(item);
         }
 
-        public void CopyTo(PointF[] array, int arrayIndex)
+        public void CopyTo(PointF[] array, int arrayIndex) 
         {
             data.CopyTo(array, arrayIndex);
         }
 
-        public bool Remove(PointF item)
+        public bool Remove(PointF item) //видалення вузлу інтерполяції
         {
             return data.Remove(item);
         }
@@ -139,30 +139,30 @@ namespace MathPart
             return GetEnumerator();
         }
 
-        public int IndexOf(PointF item)
+        public int IndexOf(PointF item) // пошук у сітці інтерполяції
         {
             return ((IList<PointF>)data).IndexOf(item);
         }
 
-        public void Insert(int index, PointF item)
+        public void Insert(int index, PointF item) // вставка у сітку
         {
             data.Insert(index, item);
             writePoint(item);
         }
 
-        public void RemoveAt(int index)
+        public void RemoveAt(int index) //видалення вузлу інтерполяції за індексом
         {
             data.RemoveAt(index);
             File.WriteAllText(filename, string.Empty);
             writePoints(data);
         }
 
-        public void Sort(IComparer<PointF> comparer)
+        public void Sort(IComparer<PointF> comparer) //сортування за заданим порівнювачем
         {
             data.Sort(comparer);
         }
 
-        public List<PointF> ToList()
+        public List<PointF> ToList() // приведення типу до списку
         {
             return data;
         }

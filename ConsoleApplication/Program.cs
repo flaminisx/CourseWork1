@@ -6,15 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using MathPart;
 using System.Globalization;
+using System.Drawing;
 
 namespace ConsoleApplication
 {
     class Program
     {
-        List<KeyValuePair<double, double>> values;
+        List<PointF> values;
         private void initializeData(String fileName)
         {
-            values = new List<KeyValuePair<double, double>>();
+            values = new List<PointF>();
             try
             {
                 using (Stream stream = File.Open("input.txt", FileMode.Open))
@@ -24,7 +25,7 @@ namespace ConsoleApplication
                     while ((line = sr.ReadLine()) != null)
                     {
                         string[] arr = line.Split(' ');
-                        values.Add(new KeyValuePair<double, double>(Double.Parse(arr[0]), Double.Parse(arr[1])));
+                        values.Add(new PointF(Convert.ToSingle(arr[0]), Convert.ToSingle(arr[1])));
 
                     }
                 }
@@ -41,9 +42,9 @@ namespace ConsoleApplication
         private void showInput()
         {
             Console.WriteLine("You entered {0} values:", values.Count);
-            foreach (KeyValuePair<double, double> value in values)
+            foreach (PointF value in values)
             {
-                Console.WriteLine("({0} : {1})", value.Key, value.Value);
+                Console.WriteLine("({0} : {1})", value.X, value.Y);
             }
         }
         public Program()
@@ -93,7 +94,7 @@ namespace ConsoleApplication
             }
             try
             {
-                i.init(values.ToArray());
+                i.init(values);
             }
             catch (NotImplementedException e)
             {
@@ -106,7 +107,19 @@ namespace ConsoleApplication
             }
             return i;
         }
-
+        public int getN()
+        {
+            Console.WriteLine("Enter the power of interpolation: ");
+            try
+            {
+                return int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Try again..");
+                return getN();
+            }
+        }
         static void Main(string[] args)
         {
             new Program();

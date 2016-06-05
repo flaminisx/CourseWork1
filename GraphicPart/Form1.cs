@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using MathPart;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using MathPart;
 
 namespace GraphicPart
 {
@@ -21,11 +21,11 @@ namespace GraphicPart
         private double min, max;
         public Form1()
         {
-            InitializeComponent();
-            data = new Storage();
+            InitializeComponent(); // ініціалізація інтерфейсу користувача
+            data = new Storage(); // зчитування інтерполяційної сітки з файлу у змінну
             kdata = new List<PointF>();
             if (data.Count <= MAX_POWER)
-                powerOfInterpolation = data.Count - 1;
+                powerOfInterpolation = data.Count - 1; // встановлення степеня інтерполяції для методу Ньютона
             if (data.Count > 1)
             {
                 min = data[0].X;
@@ -33,11 +33,12 @@ namespace GraphicPart
                 displayKnown();
                 displayInterpolators(min, max);
             }
-            //chart.MouseWheel += new MouseEventHandler(chartWheelEvent); //uncomment to wheel
-            knownGridView.DataSource = data;
+            //chart.MouseWheel += new MouseEventHandler(chartWheelEvent); //розкоментувати для увімкнення збільшення графіку за допомогою прокрутки миші
+            knownGridView.DataSource = data; //відображення інтерполяційної сітки
             methodPicker.SelectedIndex = 0;
+            if (!File.Exists("rezults.txt")) File.Create("rezults.txt").Dispose(); // створити (якщо не існує) файл для збереження результатів
         }
-        private void displayKnown()
+        private void displayKnown() // відобразити точки інтерполяційної сітки
         {
             getKnown();
             if (kdata.Count < 0) return;
@@ -47,11 +48,10 @@ namespace GraphicPart
             foreach (PointF p in kdata)
             {
                 DataPoint d = new DataPoint(p.X, p.Y);
-                //d.Label = "(" + p.X + ":" + p.Y + ")";
                 known.Points.Add(d);
             }
         }
-        public void redisplayInterpolators(double from, double to)
+        public void redisplayInterpolators(double from, double to) // перевідображення роботи обох методів на графіку у заданих межах
         {
             if (data.Count <= 1) return;
             if (data.Count <= MAX_POWER) powerOfInterpolation = data.Count - 1;
@@ -70,7 +70,7 @@ namespace GraphicPart
             displayKnown();
             displayInterpolators(from, to);
         }
-        public void displayInterpolators(double from, double to)
+        public void displayInterpolators(double from, double to) // відображення роботи обох методів на графіку у заданих межах
         {
             if (data.Count < 1) return;
             NewtonInterpolator newton = new NewtonInterpolator(data.ToList());
@@ -79,7 +79,7 @@ namespace GraphicPart
             displayInterpolator(new SplineInterpolator(data.ToList()), "Spline", min, max);
             displayChartDomain();
         }
-        public void displayInterpolator(Interpolator interpolator, string name, double from, double to)
+        public void displayInterpolator(Interpolator interpolator, string name, double from, double to) // відобразити роботу одного метода інтерполяції на графіку у заданих межах X
         { 
             var series = chart.Series.Add(name);
             series.ChartType = SeriesChartType.Line;
@@ -93,16 +93,16 @@ namespace GraphicPart
             series.Color = colors[num++];
             if (num > 1) num = 0;
         }
-        public void chartWheelEvent(object o, MouseEventArgs e)
+        public void chartWheelEvent(object o, MouseEventArgs e) // обробник події прокрутки миші, збільшення/зменшення графіку
         {
             Console.WriteLine(e.Delta);
             Console.WriteLine(e.X);
-            double x = (e.X/chart.Width)*(max-min);
+            double x = (e.X / chart.Width) * (max - min);
             min += (x-min) * 10 / e.Delta;
             max -= (max - x) * 10 / e.Delta;
             redisplayInterpolators(min, max);
         }
-        private void getKnown()
+        private void getKnown() // пошук точок, що будуть відображатись на графіку
         {
             kdata.Clear();
             foreach (PointF p in data)
@@ -114,7 +114,7 @@ namespace GraphicPart
             }
         }
 
-        private void addInputBtn_Click(object sender, EventArgs e)
+        private void addInputBtn_Click(object sender, EventArgs e)  // обробник події натиснення кнопки "додати точку", додавання точки у інтерполяційну сітку 
         {
             data.Add(new PointF(Convert.ToSingle(inputXbox.Text), Convert.ToSingle(inputYbox.Text)));
             if (data.Count <= MAX_POWER)
@@ -125,11 +125,11 @@ namespace GraphicPart
             knownGridView.DataSource = data;
         }
 
-        private void sortData()
+        private void sortData() //сортування точок у інтерполяційній сітці
         {
             data.Sort(new PointXComparer());
         }
-        private void findMinMax()
+        private void findMinMax() // Знаходження початкових найменшого і найбільшого значень X у інтерполяційній сітці
         {
             foreach (PointF p in data)
             {
@@ -138,7 +138,7 @@ namespace GraphicPart
             }
         }
 
-        private void rebuildBtn_Click(object sender, EventArgs e)
+        private void rebuildBtn_Click(object sender, EventArgs e) // обробник події натиснення кнопки "перебудувати", перебудова графіків
         {
             double mn = Convert.ToDouble(xMin.Text);
             double mx = Convert.ToDouble(xMax.Text);
@@ -148,12 +148,17 @@ namespace GraphicPart
             redisplayInterpolators(min, max);
         }
 
-        private void findXEvent(object sender, EventArgs e)
+        private void findYEvent(object sender, EventArgs e) //обробник події пошуку Y (подія зміни данних у findXbox або змыни вибору methodPicker)
         {
             double x = 0;
+            timeBox.Text = "";
+            iterationBox.Text = "";
+            operationBox.Text = "";
+            polyLabel.Text = "";
             try
             {
-                x = Convert.ToDouble(findXbox.Text);
+                string text = findXbox.Text.Replace(".", ",");
+                x = Convert.ToDouble(text);
                 switch (methodPicker.SelectedIndex)
                 {
                     case 0:
@@ -168,50 +173,52 @@ namespace GraphicPart
                     default:
                         break;
                 }
-
             }
             catch (Exception ex)
             {
                 foundYbox.Text = "Error!";
             }
         }
-        private void findY(Interpolator i, double x)
+        private void findY(Interpolator i, double x) //Знайти Y за заданим ынтерполятором та значенням X
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             double y = i.getPoint(x);
             foundYbox.Text = y.ToString();
             stopWatch.Stop();
-            timeBox.Text = stopWatch.Elapsed.TotalMilliseconds + "ms";
-            if (!File.Exists("rezults.txt")) File.Create("rezults.txt").Dispose();
+            double ms = stopWatch.Elapsed.TotalMilliseconds;
+            int iterations = i.getLastIterationCount();
+            int operations = i.getLastOperationCount();
+            string poly = i.getLastPolynomString(); 
+            timeBox.Text = ms + "ms";
+            iterationBox.Text = iterations.ToString();
+            operationBox.Text = operations.ToString();
+            polyLabel.Text = poly;
+            writeRezultsToFile(x, y, i.getType(), poly, iterations, operations, ms);
+        }
+        private void writeRezultsToFile(double x, double y, string method, string poly, int iterations, int operations, double ms) // запис результатів у файл
+        {
             using (Stream stream = File.Open("rezults.txt", FileMode.Append))
             using (TextWriter sr = new StreamWriter(stream, Encoding.UTF8))
             {
-                sr.WriteLine(i.getType() + " x = " + x.ToString() + "; y = " + y.ToString());
+                sr.WriteLine(method);
+                sr.WriteLine("x = {0}; y = {1}", x, y);
+                sr.WriteLine("Polynom: " + poly);
+                sr.WriteLine("Time: {0}ms, Operations: {1}", ms, operations);
             }
-
         }
-        private void delBtn_Click(object sender, EventArgs e)
+        private void delBtn_Click(object sender, EventArgs e) // обробник події видалення точки з інтерполяційної сітки
         {
             foreach (DataGridViewRow r in knownGridView.SelectedRows)
             {
                 data.RemoveAt(r.Index);
                 Console.WriteLine(r.Index);
             }
-            //knownGridView.Update();
-            //knownGridView.Refresh();
             knownGridView.DataSource = null;
             knownGridView.DataSource = data;
             redisplayInterpolators(min, max);
         }
-
-        private void knownGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            Console.WriteLine(e.RowIndex);
-        }
-
-
-        private void displayChartDomain()
+        private void displayChartDomain() // відобразити на екрані область зоображених на графіку даних
         {
             xMin.Text = min.ToString();
             xMax.Text = max.ToString();
