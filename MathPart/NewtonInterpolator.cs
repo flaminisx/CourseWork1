@@ -21,21 +21,21 @@ namespace MathPart
         {
             this.data = points;
         }
-        private double finiteDifference(int k, int n)   // рекурсивна функція для підрахунку кінцевої різниці
+        private double finiteDifference(int k, int n)   // рекурсивна функція для підрахунку кінцевої різниці k-того елементу n-ого степеня
         {
             operations += 1;
             return (n == 1) ? data[k + 1].Y - data[k].Y : finiteDifference(k + 1, n - 1) - finiteDifference(k, n - 1);
         }
-        public double getPoint(double t)    // Пошук Y по заданому X
+        public double getPoint(double x)    // Пошук Y по заданому X
         {
             operations = iterations = 0;
-            double q = (t - data[0].X) / (data[1].X - data[0].X);
+            double q = (x - data[0].X) / (data[1].X - data[0].X);
             double f = data[0].Y;
-            poly = String.Format("{0:#.##}", f);
+            poly =  (f!=0)? f.ToString("F") : "0";
             operations += 3;
             int factorial = 1;
             double productQ = 1;
-            for (int i = 1; i < power; i++)
+            for (int i = 1; i <= power; i++)
             {
                 factorial *= i;
                 productQ *= (q - i + 1);
@@ -43,7 +43,7 @@ namespace MathPart
                 f += productQ * fd / factorial;
                 operations += 6;
                 iterations++;
-                poly += String.Format(" + ({0:#.##} * {1})/{2}!", productQ, (fd != 0) ? fd.ToString("F") : "0", i);
+                poly += String.Format(" + ({0} * {1})/{2}!", (productQ != 0) ? productQ.ToString("F") : "0", (fd != 0) ? fd.ToString("F") : "0", i);
             }
             return f;
         }

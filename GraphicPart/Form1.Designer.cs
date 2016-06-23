@@ -98,6 +98,7 @@
             this.knownGridView.Name = "knownGridView";
             this.knownGridView.Size = new System.Drawing.Size(232, 140);
             this.knownGridView.TabIndex = 1;
+            this.knownGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.knownGridView_CellContentClick);
             // 
             // label1
             // 

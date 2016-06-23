@@ -86,10 +86,13 @@ namespace GraphicPart
             series.Legend = name;
             series.LegendText = name + " interpolator";
             double step = (max - min)/ 100;
+            Stopwatch t = new Stopwatch();
+            t.Start();
             for (double i = from; i <= to; i+=0.01)
             {
                 series.Points.AddXY(i, interpolator.getPoint(i));
             }
+            Console.WriteLine("{0}, {1}", name, t.ElapsedMilliseconds);
             series.Color = colors[num++];
             if (num > 1) num = 0;
         }
@@ -116,9 +119,24 @@ namespace GraphicPart
 
         private void addInputBtn_Click(object sender, EventArgs e)  // обробник події натиснення кнопки "додати точку", додавання точки у інтерполяційну сітку 
         {
-            data.Add(new PointF(Convert.ToSingle(inputXbox.Text), Convert.ToSingle(inputYbox.Text)));
+            try
+            {
+                data.Add(new PointF(Convert.ToSingle(inputXbox.Text), Convert.ToSingle(inputYbox.Text)));
+            }
+            catch (Storage.HasSuchPointException ex)
+            {
+                MessageBox.Show("Така точка вже є в сітці.", "Помилка!");
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Введено невірні дані.", "Помилка!");
+                return;
+            }
+            
             if (data.Count <= MAX_POWER)
                 powerOfInterpolation = data.Count - 1;
+            sortData();
             findMinMax();
             redisplayInterpolators(min, max);
             knownGridView.DataSource = null;
@@ -140,12 +158,27 @@ namespace GraphicPart
 
         private void rebuildBtn_Click(object sender, EventArgs e) // обробник події натиснення кнопки "перебудувати", перебудова графіків
         {
-            double mn = Convert.ToDouble(xMin.Text);
-            double mx = Convert.ToDouble(xMax.Text);
-            if (mn >= mx) return;
-            min = mn;
-            max = mx;
-            redisplayInterpolators(min, max);
+            try
+            {
+                double mn = Convert.ToDouble(xMin.Text);
+                double mx = Convert.ToDouble(xMax.Text);
+                if (mn >= mx)
+                {
+                    MessageBox.Show("Введені дані некоректні.", "Помилка!");
+                }
+                else
+                {
+                    min = mn;
+                    max = mx;
+                }
+                redisplayInterpolators(min, max);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Введені дані некоректні.", "Помилка!");
+            }
+            
+
         }
 
         private void findYEvent(object sender, EventArgs e) //обробник події пошуку Y (подія зміни данних у findXbox або змыни вибору methodPicker)
@@ -179,7 +212,7 @@ namespace GraphicPart
                 foundYbox.Text = "Error!";
             }
         }
-        private void findY(Interpolator i, double x) //Знайти Y за заданим ынтерполятором та значенням X
+        private void findY(Interpolator i, double x) //Знайти Y за заданим інтерполятором та значенням X
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -218,6 +251,12 @@ namespace GraphicPart
             knownGridView.DataSource = data;
             redisplayInterpolators(min, max);
         }
+
+        private void knownGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
         private void displayChartDomain() // відобразити на екрані область зоображених на графіку даних
         {
             xMin.Text = min.ToString();

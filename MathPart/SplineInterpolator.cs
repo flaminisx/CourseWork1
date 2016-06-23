@@ -100,7 +100,7 @@ namespace MathPart
                                 (s.d != 0) ? s.d.ToString("F") : "0");
             return s.a + (s.b + (s.c / 2.0 + s.d * dx / 6.0) * dx) * dx;
         }
-        SplineTuple binarySearch(double x) // бінарний пошук потрібного сплайну
+        private SplineTuple binarySearch(double x) // бінарний пошук потрібного сплайну
         {
             int i = 0;
             int j = splines.Length - 1;

@@ -12,8 +12,10 @@ namespace MathPart
 {
     public class Storage : ICollection<PointF>, IList<PointF>, IListSource //класс для збереження інтерполяційної сітки
     {
+        public class HasSuchPointException : Exception
+        { }
         private String filename; // назва файлу для збереження данних
-        List<PointF> data; // список вузлів інтерполяції
+        private List<PointF> data; // список вузлів інтерполяції
         public int Count //кількість вузлів інтерполяції
         {
             get
@@ -101,9 +103,18 @@ namespace MathPart
                 }
             }
         }
-
+        public bool HasX(PointF point) // Перевірка на наявність точки з такою координатою Х
+        {
+            bool r = false;
+            foreach (PointF p in data)
+            {
+                if (p.X == point.X) r = true;
+            }
+            return r;
+        }
         public void Add(PointF item) // додавання точки у файл і список
         {
+            if (HasX(item)) throw new HasSuchPointException();
             writePoint(item);
             data.Add(item);
         }
